@@ -1,15 +1,12 @@
-package br.univille;
+package br.univille.ExercThread3;
 
-import java.util.Random;
-
-public class ExecThread3 implements Runnable {
-
+public class Somador implements Runnable {
     private int[] lista;
     private int inicio;
     private int fim;
     public long somaParcial = 0;
 
-    public ExecThread3(int[] lista, int inicio, int fim) {
+    public Somador(int[] lista, int inicio, int fim) {
         this.lista = lista;
         this.inicio = inicio;
         this.fim = fim;
@@ -22,46 +19,11 @@ public class ExecThread3 implements Runnable {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-
-        int[] lista = new int[1_000_000];
-        Random random = new Random();
-
-        for (int i = 0; i < lista.length; i++) {
-            lista[i] = random.nextInt();
-        }
-
-        // 1 - Some todos os valores de forma sequencial e meça o tempo de execução
-        long inicio = System.nanoTime();
-
-        long soma = 0;
-        for (int i = 0; i < lista.length; i++) {
-            soma += lista[i];
-        }
-
-        long fim = System.nanoTime();
-
-        long tempoSequencial = (fim - inicio) / 1_000_000;
-
-        System.out.println("Soma sequencial: " + soma);
-        System.out.println("Tempo sequencial: " + tempoSequencial + " ms\n");
-
-        // 2 - Some todos os valores de forma concorrente com 10 threads e meça o tempo de execução (Threads de Plataforma)
-        executarTeste(lista, 10, tempoSequencial, false);
-        // 3 - Some todos os valores de forma concorrente com 100 threads e meça o tempo de execução (Threads de Plataforma)
-        executarTeste(lista, 100, tempoSequencial, false);
-
-        // 5 - Execução com Threads Virtuais 
-        executarTeste(lista, 10, tempoSequencial, true);
-        executarTeste(lista, 100, tempoSequencial, true);
-
-    }
-
     public static void executarTeste(int[] lista, int nThreads, long tempoSequencial, boolean virtual)
             throws InterruptedException {
 
         Thread[] threads = new Thread[nThreads];
-        ExecThread3[] tarefas = new ExecThread3[nThreads];
+        Main[] tarefas = new Main[nThreads];
 
         int bloco = lista.length / nThreads;
 
@@ -72,7 +34,7 @@ public class ExecThread3 implements Runnable {
             int inicioBloco = i * bloco;
             int fimBloco = (i == nThreads - 1) ? lista.length : inicioBloco + bloco;
 
-            tarefas[i] = new ExecThread3(lista, inicioBloco, fimBloco);
+            tarefas[i] = new Main(lista, inicioBloco, fimBloco);
 
             if (virtual) {
                 threads[i] = Thread.ofVirtual().start(tarefas[i]);
