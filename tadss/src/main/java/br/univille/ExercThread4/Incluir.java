@@ -14,8 +14,10 @@ public class Incluir implements Runnable {
     @Override
     public void run() {
         Random random = new Random();
-        while(!Thread.currentThread().isInterrupted()){
-            lista.add((short) random.nextInt(1000));
+        while(!Thread.currentThread().isInterrupted()) {
+            synchronized (lista) {
+                lista.add((short) random.nextInt(1000));
+            }
         }
     }
 }

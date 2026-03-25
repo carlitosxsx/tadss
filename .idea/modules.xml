@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/tadss.iml" filepath="$PROJECT_DIR$/.idea/tadss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tadss/tadss.iml" filepath="$PROJECT_DIR$/tadss/tadss.iml" />
     </modules>
   </component>
 </project>

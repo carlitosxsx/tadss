@@ -10,7 +10,6 @@ public class Main {
         Thread.ofPlatform().start(new Incluir(lista));
         Thread.ofPlatform().start(new Remover(lista));
         Thread.ofPlatform().start(new Imprimir(lista));
-
         System.out.println(lista);
 
     }

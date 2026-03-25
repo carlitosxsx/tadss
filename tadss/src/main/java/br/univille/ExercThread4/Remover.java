@@ -14,7 +14,9 @@ public class Remover implements Runnable {
     public void run() { //busy wait
         while(!Thread.currentThread().isInterrupted()){
             if(!lista.isEmpty()){
-                lista.removeFirst();
+                synchronized (lista) {
+                    lista.removeFirst();
+                }
             }
         }
     }

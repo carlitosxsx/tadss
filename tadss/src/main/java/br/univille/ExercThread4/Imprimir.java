@@ -13,7 +13,9 @@ public class Imprimir implements Runnable{
 @Override
     public void run() {
         while(!Thread.currentThread().isInterrupted()){
-            System.out.println(lista);
+            synchronized (lista){
+                System.out.println(lista);
+            }
             try{
                 Thread.sleep(1000);
             }catch(InterruptedException ie){

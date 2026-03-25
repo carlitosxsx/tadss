@@ -18,3 +18,23 @@
 - thread de plataforma (so);
 - green thread: é menos usada pois foca em dispositivos com 1 núcleo;
 - virtual thread (coroutines): N > 1;
+
+# 25/03/2026
+
+- preemptar: remoção de uma thread do estado de running;
+- qualquer objeto no java pode ser syncronized;
+- semaphore indica quantas threads podem executar um trecho de código;
+- mutex tem a mesma função do semaphore mas indicado somente uma thread
+- thread.yield(): abrir mão da cpu para voltar para ready;
+
+### revisão
+
+- processo: programa em execução;
+- thread: fluxo de execução dentro do processo;
+- stack: área de memória da thread (variáveis locais e métodos);
+- thread deamon: processo ou thread que não tem fim;
+- prioridade: valor informado ao escalonador para ele levar em consideração no momento de escolher a thread;
+- starvation: thread que não consegue tempo na cpu (morre de fome);
+- condição de corrida: resultado final dependente da temporização imprevisível (corrida) dos eventos;
+- escalonador cooperativo: threads tem que cooperar evitar thread selfish
+- escalonador preemptivo: 
