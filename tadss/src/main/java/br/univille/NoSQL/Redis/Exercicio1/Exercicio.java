@@ -1,4 +1,4 @@
-package exercicio;
+package br.univille.NoSQL.Redis.Exercicio1;
 
 import java.util.Set;
 import redis.clients.jedis.RedisClient;

@@ -37,4 +37,9 @@
 - starvation: thread que não consegue tempo na cpu (morre de fome);
 - condição de corrida: resultado final dependente da temporização imprevisível (corrida) dos eventos;
 - escalonador cooperativo: threads tem que cooperar evitar thread selfish
-- escalonador preemptivo: 
+- escalonador preemptivo
+
+# 20/05/2026
+
+- serializar objeto: converter o objeto em uma sequência de bytes que pode ser transmitido para rede, disco, etc.
+- opaco
