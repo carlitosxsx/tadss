@@ -42,4 +42,8 @@
 # 20/05/2026
 
 - serializar objeto: converter o objeto em uma sequência de bytes que pode ser transmitido para rede, disco, etc.
-- opaco
+- opacidade do dado
+- redis:
+    - é um banco em memória
+    - tem a opção de snapshot/AOF
+    - serviço de mensageria (somente topic)
