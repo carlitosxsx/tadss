@@ -9,30 +9,47 @@ import java.util.Map;
 
 public class PessoaDAO {
 
-    private Jedis jedis;
+    private Jedis redis;
 
     private static final String CHAVE = "pessoas";
 
     public PessoaDAO() {
 
-        jedis = new Jedis("localhost", 6379);
-
+        redis = new Jedis("localhost", 6379);
     }
 
-    public void create(Pessoa pessoa) throws Exception {
+    public void salvar(Pessoa pessoa) throws Exception {
 
-        jedis.hset(
+        redis.hset(
                 CHAVE.getBytes(),
-                pessoa.getApelido().getBytes(),
+                pessoa.getNome().getBytes(),
                 pessoa.serializar()
         );
     }
 
-    public Pessoa read(String apelido) throws Exception {
+    public List<Pessoa> listarTodos() throws Exception {
 
-        byte[] dados = jedis.hget(
+        List<Pessoa> pessoas = new ArrayList<>();
+
+        Map<byte[], byte[]> registros =
+                redis.hgetAll(CHAVE.getBytes());
+
+        for (byte[] dados : registros.values()) {
+
+            Pessoa pessoa =
+                    Pessoa.desserializar(dados);
+
+            pessoas.add(pessoa);
+        }
+
+        return pessoas;
+    }
+
+    public Pessoa buscar(String nome) throws Exception {
+
+        byte[] dados = redis.hget(
                 CHAVE.getBytes(),
-                apelido.getBytes()
+                nome.getBytes()
         );
 
         if (dados == null) {
@@ -42,53 +59,33 @@ public class PessoaDAO {
         return Pessoa.desserializar(dados);
     }
 
-    public boolean update(Pessoa pessoa) throws Exception {
+    public boolean excluir(String nome) {
 
-        if (!jedis.hexists(CHAVE, pessoa.getApelido())) {
+        return redis.hdel(CHAVE, nome) > 0;
+    }
+
+    public boolean atualizar(Pessoa pessoa) throws Exception {
+
+        if (!redis.hexists(CHAVE, pessoa.getNome())) {
             return false;
         }
 
-        jedis.hset(
+        redis.hset(
                 CHAVE.getBytes(),
-                pessoa.getApelido().getBytes(),
+                pessoa.getNome().getBytes(),
                 pessoa.serializar()
         );
 
         return true;
     }
 
-    public boolean delete(String apelido) {
+    public boolean existe(String nome) {
 
-        return jedis.hdel(CHAVE, apelido) > 0;
-    }
-
-    public List<Pessoa> listarTodos() throws Exception {
-
-        List<Pessoa> lista = new ArrayList<>();
-
-        Map<byte[], byte[]> registros =
-                jedis.hgetAll(CHAVE.getBytes());
-
-        for (byte[] dados : registros.values()) {
-
-            Pessoa pessoa =
-                    Pessoa.desserializar(dados);
-
-            lista.add(pessoa);
-        }
-
-        return lista;
-    }
-
-    public boolean existe(String apelido) {
-
-        return jedis.hexists(CHAVE, apelido);
+        return redis.hexists(CHAVE, nome);
     }
 
     public void fecharConexao() {
 
-        if (jedis != null) {
-            jedis.close();
-        }
+        redis.close();
     }
 }

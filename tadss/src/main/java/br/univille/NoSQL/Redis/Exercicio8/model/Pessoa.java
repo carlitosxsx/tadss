@@ -8,7 +8,6 @@ public class Pessoa implements Serializable {
 
     private int id;
     private String nome;
-    private String apelido;
     private String telefone;
     private String email;
     private int idade;
@@ -16,33 +15,54 @@ public class Pessoa implements Serializable {
     public Pessoa() {
     }
 
-    public Pessoa(int id, String nome, String apelido, String telefone, String email, int idade) {
+    public Pessoa(
+            int id,
+            String nome,
+            String telefone,
+            String email,
+            int idade
+    ) {
         this.id = id;
         this.nome = nome;
-        this.apelido = apelido;
         this.telefone = telefone;
         this.email = email;
         this.idade = idade;
     }
 
-    public byte[] serializar() throws Exception {
+    // SERIALIZAR
+    public byte[] serializar() throws IOException {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        ByteArrayOutputStream baos =
+                new ByteArrayOutputStream();
+
+        ObjectOutputStream oos =
+                new ObjectOutputStream(baos);
 
         oos.writeObject(this);
+        oos.flush();
 
         byte[] dados = baos.toByteArray();
+
+        oos.close();
+        baos.close();
 
         return dados;
     }
 
-    public static Pessoa desserializar(byte[] dados) throws IOException, ClassNotFoundException {
+    // DESSERIALIZAR
+    public static Pessoa desserializar(byte[] dados)
+            throws IOException, ClassNotFoundException {
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(dados);
-        ObjectInputStream ois = new ObjectInputStream(bais);
+        ByteArrayInputStream bais =
+                new ByteArrayInputStream(dados);
+
+        ObjectInputStream ois =
+                new ObjectInputStream(bais);
 
         Pessoa pessoa = (Pessoa) ois.readObject();
+
+        ois.close();
+        bais.close();
 
         return pessoa;
     }
@@ -53,7 +73,7 @@ public class Pessoa implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
+    }    
 
     public String getNome() {
         return nome;
@@ -61,15 +81,7 @@ public class Pessoa implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getApelido() {
-        return apelido;
-    }
-
-    public void setApelido(String apelido) {
-        this.apelido = apelido;
-    }
+    }    
 
     public String getTelefone() {
         return telefone;
@@ -77,7 +89,7 @@ public class Pessoa implements Serializable {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
+    }    
 
     public String getEmail() {
         return email;
@@ -85,7 +97,7 @@ public class Pessoa implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
+    }    
 
     public int getIdade() {
         return idade;
@@ -97,13 +109,11 @@ public class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        return "Pessoa{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", apelido='" + apelido + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", email='" + email + '\'' +
-                ", idade=" + idade +
-                '}';
+
+        return "\nID: " + id +
+               "\nNome: " + nome +
+               "\nTelefone: " + telefone +
+               "\nEmail: " + email +
+               "\nIdade: " + idade;
     }
 }
