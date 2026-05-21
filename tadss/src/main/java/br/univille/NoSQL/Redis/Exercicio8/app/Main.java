@@ -141,49 +141,19 @@ public class Main {
                     switch (campo) {
 
                         case "1":
-
-                            System.out.print(
-                                    "Novo telefone: "
-                            );
-
-                            pessoaEditar.setTelefone(
-                                    scanner.nextLine()
-                            );
-
+                            System.out.print("Novo telefone: ");
+                            pessoaEditar.setTelefone(scanner.nextLine());
                             break;
-
                         case "2":
-
-                            System.out.print(
-                                    "Novo email: "
-                            );
-
-                            pessoaEditar.setEmail(
-                                    scanner.nextLine()
-                            );
-
+                            System.out.print("Novo email: ");
+                            pessoaEditar.setEmail(scanner.nextLine());
                             break;
-
                         case "3":
-
-                            System.out.print(
-                                    "Nova idade: "
-                            );
-
-                            pessoaEditar.setIdade(
-                                    Integer.parseInt(
-                                            scanner.nextLine()
-                                    )
-                            );
-
+                            System.out.print("Nova idade: ");
+                            pessoaEditar.setIdade(Integer.parseInt(scanner.nextLine()));
                             break;
-
                         default:
-
-                            System.out.println(
-                                    "Campo inválido."
-                            );
-
+                            System.out.println("Campo inválido.");
                             continue;
                     }
 
