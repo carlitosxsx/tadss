@@ -1,31 +1,39 @@
 package br.univille.NoSQL.Redis.Exercicio8.dao;
 
-import java.util.HashMap;
-import java.util.Map;
 import br.univille.NoSQL.Redis.Exercicio8.model.Pessoa;
 import redis.clients.jedis.Jedis;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class PessoaDAO {
 
-    private HashMap<String, byte[]> banco;
-    private Jedis redis;
+    private Jedis jedis;
+
+    private static final String CHAVE = "pessoas";
 
     public PessoaDAO() {
-        banco = new HashMap<>();
-        redis = new Jedis("localhost", 6379);
+
+        jedis = new Jedis("localhost", 6379);
+
     }
 
     public void create(Pessoa pessoa) throws Exception {
 
-        banco.put(
-                pessoa.getApelido(),
+        jedis.hset(
+                CHAVE.getBytes(),
+                pessoa.getApelido().getBytes(),
                 pessoa.serializar()
         );
     }
 
-    public Pessoa read(String apelido) throws Exception, ClassNotFoundException {
+    public Pessoa read(String apelido) throws Exception {
 
-        byte[] dados = banco.get(apelido);
+        byte[] dados = jedis.hget(
+                CHAVE.getBytes(),
+                apelido.getBytes()
+        );
 
         if (dados == null) {
             return null;
@@ -36,12 +44,13 @@ public class PessoaDAO {
 
     public boolean update(Pessoa pessoa) throws Exception {
 
-        if (!banco.containsKey(pessoa.getApelido())) {
+        if (!jedis.hexists(CHAVE, pessoa.getApelido())) {
             return false;
         }
 
-        banco.put(
-                pessoa.getApelido(),
+        jedis.hset(
+                CHAVE.getBytes(),
+                pessoa.getApelido().getBytes(),
                 pessoa.serializar()
         );
 
@@ -50,22 +59,36 @@ public class PessoaDAO {
 
     public boolean delete(String apelido) {
 
-        if (banco.containsKey(apelido)) {
-            banco.remove(apelido);
-            return true;
-        }
-
-        return false;
+        return jedis.hdel(CHAVE, apelido) > 0;
     }
 
-    public void listar() throws Exception, ClassNotFoundException {
+    public List<Pessoa> listarTodos() throws Exception {
 
-        for (Map.Entry<String, byte[]> entry : banco.entrySet()) {
+        List<Pessoa> lista = new ArrayList<>();
+
+        Map<byte[], byte[]> registros =
+                jedis.hgetAll(CHAVE.getBytes());
+
+        for (byte[] dados : registros.values()) {
 
             Pessoa pessoa =
-                    Pessoa.desserializar(entry.getValue());
+                    Pessoa.desserializar(dados);
 
-            System.out.println(pessoa);
+            lista.add(pessoa);
+        }
+
+        return lista;
+    }
+
+    public boolean existe(String apelido) {
+
+        return jedis.hexists(CHAVE, apelido);
+    }
+
+    public void fecharConexao() {
+
+        if (jedis != null) {
+            jedis.close();
         }
     }
 }
